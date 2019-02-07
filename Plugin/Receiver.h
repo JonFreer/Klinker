@@ -221,7 +221,7 @@ namespace klinker
             input_->PauseStreams();
             input_->EnableVideoInput(
                 displayMode_->GetDisplayMode(),
-                bmdFormat8BitYUV,
+                bmdFormat8BitARGB,
                 bmdVideoInputEnableFormatDetection
             );
             input_->FlushStreams();
@@ -389,15 +389,20 @@ namespace klinker
             // Enable the video input.
             res = input_->EnableVideoInput(
                 displayMode_->GetDisplayMode(),
-                bmdFormat8BitYUV,
+                bmdFormat8BitARGB,
                 bmdVideoInputEnableFormatDetection
             );
+			
 
             if (res != S_OK)
             {
                 error_ = "Can't open input device (possibly already used).";
                 return false;
             }
+
+			IDeckLinkKeyer*					deckLinkKeyer = NULL;
+			int keyLevel = 0;
+			deckLinkKeyer->Enable(true);							// Enable internal keying				
 
             return true;
         }
