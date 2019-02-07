@@ -1,8 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Plugin"
+    "\\Assets",
+    "\\Assets\\Klinker",
+    "\\Assets\\Klinker\\Runtime",
+    "\\Assets\\Klinker\\Runtime\\Internal"
   ],
-  "SelectedNode": "\\Plugin",
+  "SelectedNode": "\\Assets\\Klinker\\Runtime\\Internal\\EnumeratorPlugin.cs.meta",
   "PreviewInSolutionExplorer": false
 }

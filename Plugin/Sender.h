@@ -305,9 +305,10 @@ namespace klinker
             auto height = displayMode_->GetHeight();
             IDeckLinkMutableVideoFrame* frame = nullptr;
             ShouldOK(output_->CreateVideoFrame(
-                width, height, width * 2,
-                bmdFormat8BitYUV, bmdFrameFlagDefault, &frame
+                width, height, width * 4,
+                bmdFormat8BitARGB, bmdFrameFlagFlipVertical, &frame
             ));
+
             return frame;
         }
 
@@ -317,7 +318,7 @@ namespace klinker
             auto height = displayMode_->GetHeight();
             void* pointer = nullptr;
             ShouldOK(frame->GetBytes(&pointer));
-            std::memcpy(pointer, data, (std::size_t)2 * width * height);
+            std::memcpy(pointer, data, (std::size_t)4 * width * height);
         }
 
         void SetTimecode(IDeckLinkMutableVideoFrame* frame, unsigned int timecode) const
@@ -424,7 +425,7 @@ namespace klinker
 
             // Enable the video output.
             res = output_->EnableVideoOutput(
-                displayMode_->GetDisplayMode(), bmdVideoOutputRP188
+                displayMode_->GetDisplayMode(), bmdVideoOutputFlagDefault
             );
 
             if (res != S_OK)
@@ -432,6 +433,19 @@ namespace klinker
                 error_ = "Can't open output device (possibly already used).";
                 return false;
             }
+
+			IDeckLinkKeyer*					deckLinkKeyer = NULL;
+			//GdiDraw(m_videoFrameGdi);
+
+			if (device->QueryInterface(IID_IDeckLinkKeyer, (void**)&deckLinkKeyer) != S_OK)
+			{
+				fprintf(stderr, "Could not obtain the IDeckLinkOutput interface\n");
+			}
+			else
+			{
+				int keyLevel = 0;
+				deckLinkKeyer->Enable(true);							// Enable internal keying	
+			}
 
             return true;
         }
